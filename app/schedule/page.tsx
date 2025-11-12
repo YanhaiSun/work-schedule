@@ -138,11 +138,11 @@ export default function SchedulePage() {
     return (
       <div className="p-1 h-full" style={{ backgroundColor }}>
         <div className="flex justify-between items-center">
-          <span className="text-sm font-medium">{arg.dayNumberText.replace('日', '')}</span>
+          <span className="text-sm font-medium fixed-text-gray-900">{arg.dayNumberText.replace('日', '')}</span>
           
           {badge && (
             <span className={`text-sm px-1 py-0.5 rounded ${
-              badge === '休' ? 'bg-red-100 text-red-800' : 'bg-green-100 text-green-800'
+              badge === '休' ? 'bg-red-100 fixed-text-red-800' : 'bg-green-100 fixed-text-green-800'
             }`}>
               {badge}
             </span>
@@ -150,7 +150,7 @@ export default function SchedulePage() {
           
         </div>
         {holidayName && badge !== '班' && (
-          <div className="mt-1 text-sm text-red-800" >
+          <div className="mt-1 text-sm fixed-text-red-800" >
             {holidayName}
           </div>
         )}
@@ -215,11 +215,27 @@ export default function SchedulePage() {
             background-color: transparent !important;
             border: inherit !important;
           }
+          
+          /* 打印时使用最大的字体 */
+          .employee-name {
+            font-size: 1.5rem !important;
+            color: #111827 !important;
+          }
+          
+          .fixed-text-gray-900,
+          .fixed-text-gray-800,
+          .fixed-text-gray-600,
+          .fixed-text-gray-500,
+          .fixed-text-red-800,
+          .fixed-text-green-800 {
+            color: #111827 !important;
+          }
         }
         
         /* 员工姓名在不同屏幕尺寸下的字体大小 */
         .employee-name {
           font-size: 1.125rem; /* 默认大小 (lg) */
+          color: #111827; /* 固定深色，避免深色模式变化 */
         }
         
         /* 在小屏幕设备上减小字体 */
@@ -247,29 +263,54 @@ export default function SchedulePage() {
             font-size: 1.5rem; /* 2xl */
           }
         }
+        
+        /* 固定其他文本颜色，避免深色模式变化 */
+        .fixed-text-gray-900 {
+          color: #111827 !important;
+        }
+        
+        .fixed-text-gray-800 {
+          color: #1f2937 !important;
+        }
+        
+        .fixed-text-gray-600 {
+          color: #4b5563 !important;
+        }
+        
+        .fixed-text-gray-500 {
+          color: #6b7280 !important;
+        }
+        
+        .fixed-text-red-800 {
+          color: #991b1b !important;
+        }
+        
+        .fixed-text-green-800 {
+          color: #166534 !important;
+        }
       `}</style>
       <div className="max-w-6xl mx-auto print-container">
         <div className="text-center mb-8">
-          <h1 className="text-3xl font-bold text-gray-900 mb-2 no-print">排班表</h1>
+          <h1 className="text-3xl font-bold fixed-text-gray-900 mb-2 no-print">排班表</h1>
           <div className="flex justify-center items-center space-x-4 mb-2">
             <button 
               onClick={handlePrevMonth}
-              className="text-gray-600 hover:text-gray-900 no-print"
+              className="fixed-text-gray-600 hover:fixed-text-gray-900 no-print"
             >
               &larr;
             </button>
-            <h2 className="text-2xl font-semibold text-gray-800">
+            <h2 className="text-2xl font-semibold fixed-text-gray-800">
               {currentDate.getFullYear()}年 {currentDate.getMonth() + 1}月
             </h2>
             <button 
               onClick={handleNextMonth}
-              className="text-gray-600 hover:text-gray-900 no-print"
+              className="fixed-text-gray-600 hover:fixed-text-gray-900 no-print"
             >
               &rarr;
             </button>
           </div>
           {/* {(config.startDate || config.startEmployee) && (
-            <div className="text-sm text-gray-600 no-print">
+            <div className="text-sm fixed-text-gray-600 no-print">
               {config.startDate && <span>起始日期: {config.startDate} </span>}
               {config.startEmployee && <span>起始员工: {config.startEmployee}</span>}
             </div>
@@ -278,7 +319,7 @@ export default function SchedulePage() {
 
         <div className="bg-white shadow-md print:shadow-none print:border print:border-gray-300">
           {loading ? (
-            <div className="p-8 text-center text-gray-500">
+            <div className="p-8 text-center fixed-text-gray-500">
               加载中...
             </div>
           ) : (
@@ -300,7 +341,7 @@ export default function SchedulePage() {
               }}
               dayHeaderContent={(arg) => {
                 const weekdays = ['周日', '周一', '周二', '周三', '周四', '周五', '周六'];
-                return weekdays[arg.date.getDay()];
+                return <span className="fixed-text-gray-900">{weekdays[arg.date.getDay()]}</span>;
               }}
               weekends={true}
               events={[]} // 我们通过 dayCellContent 自定义渲染，不需要事件

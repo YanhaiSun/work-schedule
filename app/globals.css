@@ -12,12 +12,15 @@
   --font-mono: var(--font-geist-mono);
 }
 
+/* 移除深色模式设置，始终使用浅色模式 */
+/*
 @media (prefers-color-scheme: dark) {
   :root {
     --background: #0a0a0a;
     --foreground: #ededed;
   }
 }
+*/
 
 body {
   background: var(--background);
@@ -67,18 +70,19 @@ body {
 /* 员工姓名在不同屏幕尺寸下的字体大小 */
 .employee-name {
   font-size: 1.125rem; /* 默认大小 (lg) */
+  color: #111827; /* 固定深色 */
 }
 
 /* 在小屏幕设备上减小字体 */
 @media (max-width: 768px) {
   .employee-name {
-    font-size: 0.5rem; /* md */
+    font-size: 1rem; /* md */
   }
 }
 
 @media (max-width: 480px) {
   .employee-name {
-    font-size: 0.6rem; /* sm */
+    font-size: 0.875rem; /* sm */
   }
 }
 
