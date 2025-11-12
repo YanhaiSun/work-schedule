@@ -13,8 +13,8 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "党政办排班系统",
-  description: "党政办排班系统"
+  title: "排班系统",
+  description: "排班系统"
 };
 
 export default function RootLayout({
