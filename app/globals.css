@@ -101,13 +101,13 @@ body {
 /* 在大屏幕设备上适当增大字体 */
 @media (min-width: 1280px) {
   .employee-name {
-    font-size: 1rem;
+    font-size: 0.8rem;
   }
 }
 
 @media (min-width: 1536px) {
   .employee-name {
-    font-size: 1rem; /* 2xl */
+    font-size: 0.8rem; /* 2xl */
   }
 }
 
