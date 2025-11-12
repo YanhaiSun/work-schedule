@@ -291,7 +291,6 @@ export default function SchedulePage() {
       `}</style>
       <div className="max-w-6xl mx-auto print-container">
         <div className="text-center mb-8">
-          <h1 className="text-3xl font-bold fixed-text-gray-900 mb-2 no-print">排班表</h1>
           <div className="flex justify-center items-center space-x-4 mb-2">
             <button 
               onClick={handlePrevMonth}
@@ -300,7 +299,7 @@ export default function SchedulePage() {
               &larr;
             </button>
             <h2 className="text-2xl font-semibold fixed-text-gray-800">
-              {currentDate.getFullYear()}年 {currentDate.getMonth() + 1}月
+              {currentDate.getFullYear()}年 {currentDate.getMonth() + 1}月 排班表
             </h2>
             <button 
               onClick={handleNextMonth}
