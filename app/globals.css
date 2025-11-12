@@ -1,0 +1,96 @@
+@import "tailwindcss";
+
+:root {
+  --background: #ffffff;
+  --foreground: #171717;
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --font-sans: var(--font-geist-sans);
+  --font-mono: var(--font-geist-mono);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --background: #0a0a0a;
+    --foreground: #ededed;
+  }
+}
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+.fc-daygrid-day-top {
+  /* 你的样式 */
+  justify-content: left !important;
+}
+.fc-daygrid-day-events {
+  /* 你的样式 */
+  display: none;
+}
+.fc-daygrid-day {
+  height: 100px;
+}
+.fc-daygrid-day-top {
+  height: 100px;
+}
+/* 修复工具栏隐藏问题 */
+.fc-header-toolbar,
+.fc-toolbar,
+.fc-toolbar-ltr {
+  display: none !important;
+}
+.fc-toolbar-chunk {
+  display: none !important;
+}
+.p-1 h-full {
+  height: 100%;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+}
+.fc-daygrid-day-number {
+  /* 你的样式 */
+  width: 100%;
+  padding: 0;
+}
+.mt-1 {
+  justify-content: center;
+  display: flex;
+  text-align: center
+}
+/* 员工姓名在不同屏幕尺寸下的字体大小 */
+.employee-name {
+  font-size: 1.125rem; /* 默认大小 (lg) */
+}
+
+/* 在小屏幕设备上减小字体 */
+@media (max-width: 768px) {
+  .employee-name {
+    font-size: 0.5rem; /* md */
+  }
+}
+
+@media (max-width: 480px) {
+  .employee-name {
+    font-size: 0.6rem; /* sm */
+  }
+}
+
+/* 在大屏幕设备上适当增大字体 */
+@media (min-width: 1280px) {
+  .employee-name {
+    font-size: 1.25rem; /* xl */
+  }
+}
+
+@media (min-width: 1536px) {
+  .employee-name {
+    font-size: 1.5rem; /* 2xl */
+  }
+}
