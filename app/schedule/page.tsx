@@ -155,7 +155,7 @@ export default function SchedulePage() {
           </div>
         )}
         {employee && (
-          <div className="mt-1 font-medium truncate employee-name">
+          <div className="mt-1 truncate employee-name">
             {employee}
           </div>
         )}

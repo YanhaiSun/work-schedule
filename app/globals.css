@@ -69,7 +69,7 @@ body {
 }
 /* 员工姓名在不同屏幕尺寸下的字体大小 */
 .employee-name {
-  font-size: 1.125rem; /* 默认大小 (lg) */
+  font-size: 0.8rem; /* 默认大小 (lg) */
   color: #111827; /* 固定深色 */
 }
 
@@ -103,11 +103,23 @@ body {
   .employee-name {
     font-size: 0.8rem;
   }
+  .holiday-name {
+    font-size: 0.8rem;
+  }
+  .badge-name {
+    font-size: 0.8rem;
+  }
 }
 
 @media (min-width: 1536px) {
   .employee-name {
     font-size: 0.8rem; /* 2xl */
+  }
+  .holiday-name {
+    font-size: 0.8rem;
+  }
+  .badge-name {
+    font-size: 0.8rem;
   }
 }
 
