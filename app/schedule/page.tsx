@@ -143,14 +143,14 @@ export default function SchedulePage() {
           {badge && (
             <span className={`text-sm px-1 py-0.5 rounded ${
               badge === '休' ? 'bg-red-100 fixed-text-red-800' : 'bg-green-100 fixed-text-green-800'
-            }`}>
+            } badge-name`}>
               {badge}
             </span>
           )}
           
         </div>
         {holidayName && badge !== '班' && (
-          <div className="mt-1 text-sm fixed-text-red-800" >
+          <div className="mt-1 text-sm fixed-text-red-800 holiday-name">
             {holidayName}
           </div>
         )}
@@ -219,16 +219,6 @@ export default function SchedulePage() {
           /* 打印时使用最大的字体 */
           .employee-name {
             font-size: 1.5rem !important;
-            color: #111827 !important;
-          }
-          
-          .fixed-text-gray-900,
-          .fixed-text-gray-800,
-          .fixed-text-gray-600,
-          .fixed-text-gray-500,
-          .fixed-text-red-800,
-          .fixed-text-green-800 {
-            color: #111827 !important;
           }
         }
         
@@ -262,31 +252,6 @@ export default function SchedulePage() {
           .employee-name {
             font-size: 1.5rem; /* 2xl */
           }
-        }
-        
-        /* 固定其他文本颜色，避免深色模式变化 */
-        .fixed-text-gray-900 {
-          color: #111827 !important;
-        }
-        
-        .fixed-text-gray-800 {
-          color: #1f2937 !important;
-        }
-        
-        .fixed-text-gray-600 {
-          color: #4b5563 !important;
-        }
-        
-        .fixed-text-gray-500 {
-          color: #6b7280 !important;
-        }
-        
-        .fixed-text-red-800 {
-          color: #991b1b !important;
-        }
-        
-        .fixed-text-green-800 {
-          color: #166534 !important;
         }
       `}</style>
       <div className="max-w-6xl mx-auto print-container">

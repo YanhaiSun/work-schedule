@@ -76,25 +76,100 @@ body {
 /* 在小屏幕设备上减小字体 */
 @media (max-width: 768px) {
   .employee-name {
-    font-size: 1rem; /* md */
+    font-size: 0.8rem; /* md */
+  }
+  .holiday-name {
+    font-size: 0.7rem;
+  }
+  .badge-name {
+    font-size: 0.7rem;
   }
 }
 
 @media (max-width: 480px) {
   .employee-name {
-    font-size: 0.875rem; /* sm */
+    font-size: 0.65rem; /* sm */
+  }
+  .holiday-name {
+    font-size: 0.65rem;
+  }
+  .badge-name {
+    font-size: 0.65rem;
   }
 }
 
 /* 在大屏幕设备上适当增大字体 */
 @media (min-width: 1280px) {
   .employee-name {
-    font-size: 1.25rem; /* xl */
+    font-size: 0.9; /* xl */
   }
 }
 
 @media (min-width: 1536px) {
   .employee-name {
-    font-size: 1.5rem; /* 2xl */
+    font-size: 1; /* 2xl */
+  }
+}
+
+/* 保持"休"字和节假日名称的红色 */
+.fixed-text-red-800 {
+  color: #991b1b !important;
+}
+
+/* 保持"班"字的绿色 */
+.fixed-text-green-800 {
+  color: #166534 !important;
+}
+
+/* 保持"休"字背景色 */
+.bg-red-100 {
+  background-color: #fee2e2 !important;
+}
+
+/* 保持"班"字背景色 */
+.bg-green-100 {
+  background-color: #dcfce7 !important;
+}
+
+/* 打印时使用最大的字体 */
+@media print {
+  .employee-name {
+    font-size: 1.5rem !important;
+  }
+  
+  .fixed-text-gray-900 {
+    color: #111827 !important;
+  }
+  
+  .fixed-text-gray-800 {
+    color: #1f2937 !important;
+  }
+  
+  .fixed-text-gray-600 {
+    color: #4b5563 !important;
+  }
+  
+  .fixed-text-gray-500 {
+    color: #6b7280 !important;
+  }
+  
+  /* 保持"休"字和节假日名称的红色 */
+  .fixed-text-red-800 {
+    color: #991b1b !important;
+  }
+  
+  /* 保持"班"字的绿色 */
+  .fixed-text-green-800 {
+    color: #166534 !important;
+  }
+  
+  /* 保持"休"字背景色 */
+  .bg-red-100 {
+    background-color: #fee2e2 !important;
+  }
+  
+  /* 保持"班"字背景色 */
+  .bg-green-100 {
+    background-color: #dcfce7 !important;
   }
 }
