@@ -4,7 +4,6 @@ import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import FullCalendar from '@fullcalendar/react';
 import dayGridPlugin from '@fullcalendar/daygrid';
-import { exportToExcel, exportToPDF } from '@/lib/export';
 
 interface ScheduleEntry {
   date: string;
@@ -69,23 +68,22 @@ export default function SchedulePage() {
     }
   };
 
-  const handleExportExcel = () => {
-    const year = currentDate.getFullYear();
-    const month = currentDate.getMonth();
-    const monthNames = ['一月', '二月', '三月', '四月', '五月', '六月',
-      '七月', '八月', '九月', '十月', '十一月', '十二月'];
-    const filename = `${year}年${monthNames[month]}排班表`;
-    exportToExcel(schedule, filename);
-  };
+  // const handleExportExcel = () => {
+  //   const year = currentDate.getFullYear();
+  //   const month = currentDate.getMonth();
+  //   const monthNames = ['一月', '二月', '三月', '四月', '五月', '六月',
+  //     '七月', '八月', '九月', '十月', '十一月', '十二月'];
+  //   const filename = `${year}年${monthNames[month]}排班表`;
+  //   exportToExcel(schedule, filename);
+  // };
 
-  const handleExportPDF = () => {
-    const year = currentDate.getFullYear();
-    const month = currentDate.getMonth();
-    const monthNames = ['一月', '二月', '三月', '四月', '五月', '六月',
-      '七月', '八月', '九月', '十月', '十一月', '十二月'];
-    const filename = `${year}年${monthNames[month]}排班表`;
-    exportToPDF(schedule, filename);
-  };
+  // const handleExportPDF = () => {
+  //   const year = currentDate.getFullYear();
+  //   const month = currentDate.getMonth();
+  //   const monthNames = ['一月', '二月', '三月', '四月', '五月', '六月',
+  //     '七月', '八月', '九月', '十月', '十一月', '十二月'];
+  //   const filename = `${year}年${monthNames[month]}排班表`;
+  // };
 
   const handlePrint = () => {
     window.print();
