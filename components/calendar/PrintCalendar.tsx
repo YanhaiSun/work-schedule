@@ -81,7 +81,7 @@ export function PrintCalendar({ year, month, schedule }: PrintCalendarProps) {
                   {day && (
                     <>
                       {/* 顶部角标：日期 + 休/班（左右分布） */}
-                      <div className="absolute top-0 left-1 right-1 flex justify-between items-center z-10">
+                      <div className="absolute top-1 left-1 right-1 flex justify-between items-center z-10">
                         <span className={`font-bold text-xs ${todayHighlight ? 'text-blue-600' : 'text-gray-800'}`}>
                           {day}
                         </span>
