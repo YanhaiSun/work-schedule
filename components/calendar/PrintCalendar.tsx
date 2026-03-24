@@ -51,13 +51,13 @@ export function PrintCalendar({ year, month, schedule }: PrintCalendarProps) {
   };
 
   return (
-    <table className="w-full border-collapse">
+    <table className="w-full border-collapse table-fixed">
       <thead>
         <tr>
           {weekdays.map(day => (
             <th
               key={day}
-              className="border border-gray-300 bg-gray-100 p-3 text-center font-medium text-gray-700 align-middle"
+              className="border border-gray-300 bg-gray-100 px-2 py-2 text-center font-medium text-gray-700 align-middle h-10"
             >
               {day}
             </th>
@@ -76,18 +76,18 @@ export function PrintCalendar({ year, month, schedule }: PrintCalendarProps) {
               return (
                 <td
                   key={dayIndex}
-                  className={`border border-gray-300 p-2 h-28 relative ${todayHighlight ? 'bg-blue-50' : ''}`}
+                  className={`border border-gray-300 p-1 h-24 relative ${todayHighlight ? 'bg-blue-50' : ''}`}
                 >
                   {day && (
                     <>
                       {/* 顶部角标：日期 + 休/班（左右分布） */}
-                      <div className="absolute top-1 left-1 right-1 flex justify-between items-center z-10">
-                        <span className={`font-bold text-sm ${todayHighlight ? 'text-blue-600' : 'text-gray-800'}`}>
+                      <div className="absolute top-0 left-1 right-1 flex justify-between items-center z-10">
+                        <span className={`font-bold text-xs ${todayHighlight ? 'text-blue-600' : 'text-gray-800'}`}>
                           {day}
                         </span>
                         {entry?.holidayName && (
                           <span
-                            className={`px-1.5 py-0.5 rounded text-xs font-medium ${
+                            className={`px-1 py-0.5 rounded text-xs font-medium ${
                               entry.isOffDay
                                 ? 'bg-red-100 text-red-800'
                                 : 'bg-green-100 text-green-800'
@@ -101,13 +101,13 @@ export function PrintCalendar({ year, month, schedule }: PrintCalendarProps) {
                       {/* 居中内容：节假日名称 或 员工姓名 */}
                       <div className="absolute inset-0 flex flex-col items-center justify-center z-0">
                         {hasHolidayName ? (
-                          <div className="px-2 py-1">
-                            <span className="text-red-800 text-sm font-medium">
+                          <div className="px-1 py-0.5">
+                            <span className="text-red-800 text-xs font-medium">
                               {entry.holidayName}
                             </span>
                           </div>
                         ) : hasEmployee ? (
-                          <span className="text-gray-900 font-medium text-base">
+                          <span className="text-gray-900 font-medium text-sm">
                             {entry.employee}
                           </span>
                         ) : null}
