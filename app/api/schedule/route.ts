@@ -1,7 +1,7 @@
 import { NextResponse } from 'next/server';
-import { getHolidaysForYear } from '@/lib/holidays';
-import { generateAdvancedSchedule } from '@/lib/scheduler';
-import { getEmployees } from '@/lib/employees';
+import { getHolidaysForYear } from '@/lib/db/holidays';
+import { generateSchedule } from '@/lib/scheduler';
+import { getEmployees } from '@/lib/db/employees';
 
 export async function GET(request: Request) {
   try {
@@ -13,7 +13,7 @@ export async function GET(request: Request) {
     const holidays = await getHolidaysForYear(year);
     
     // 生成排班表
-    const schedule = await generateAdvancedSchedule(year, month, holidays);
+    const schedule = await generateSchedule(year, month, holidays);
     
     // 获取员工列表
     const employees = await getEmployees();

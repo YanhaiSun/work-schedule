@@ -1,0 +1,69 @@
+@media print {
+  @page {
+    size: A4 landscape;
+    margin: 8mm;
+  }
+
+  body * {
+    visibility: hidden;
+  }
+
+  .print-container,
+  .print-container * {
+    visibility: visible;
+  }
+
+  .print-container {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+  }
+
+  .no-print {
+    display: none !important;
+  }
+
+  /* 确保背景色打印 */
+  * {
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+  }
+
+  /* 员工姓名 */
+  .employee-name {
+    font-size: 0.8rem !important;
+    color: #111827 !important;
+  }
+
+  /* 节假日名称 */
+  .holiday-name {
+    font-size: 0.75rem !important;
+    color: #991b1b !important;
+  }
+
+  /* 休/班 标记 */
+  .badge-name {
+    font-size: 0.7rem !important;
+  }
+
+  /* 背景色 */
+  .bg-red-100 {
+    background-color: #fee2e2 !important;
+  }
+
+  .bg-green-100 {
+    background-color: #dcfce7 !important;
+  }
+
+  /* 移除今天的高亮 */
+  .fc-day-today {
+    background-color: transparent !important;
+    border: inherit !important;
+  }
+
+  /* 日期格子 */
+  .fc-daygrid-day {
+    height: 90px !important;
+  }
+}

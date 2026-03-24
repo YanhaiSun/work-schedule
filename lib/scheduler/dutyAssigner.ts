@@ -2,6 +2,9 @@ import { ScheduleEntry, Holiday } from '@/types';
 import { getEmployees } from '@/lib/db/employees';
 import { getScheduleConfig } from '@/lib/db/scheduleConfig';
 
+/**
+ * 计算从起始日期到目标日期的工作日数量
+ */
 export async function calculateWorkDaysToDate(
   startDate: string,
   targetDate: string,
@@ -19,8 +22,8 @@ export async function calculateWorkDaysToDate(
     const dayOfWeek = current.getDay();
     const holiday = holidayMap.get(dateStr);
 
-    // 工作日判断：节假日调休上班日 OR 非节假日的周一至周五
-    if ((holiday && !holiday.isOffDay) || (!holiday && dayOfWeek !== 0 && dayOfWeek !== 6)) {
+    // 是工作日
+    if (!holiday?.isOffDay && !(dayOfWeek === 0 || dayOfWeek === 6)) {
       count++;
     }
 
@@ -30,6 +33,9 @@ export async function calculateWorkDaysToDate(
   return count;
 }
 
+/**
+ * 根据工作日索引分配员工
+ */
 export function assignEmployeeByIndex(
   employees: string[],
   startEmployee: string,
@@ -43,6 +49,9 @@ export function assignEmployeeByIndex(
   return employees[(startIndex + workDayIndex) % employees.length];
 }
 
+/**
+ * 生成指定月份的排班表
+ */
 export async function generateSchedule(
   year: number,
   month: number,
@@ -62,8 +71,7 @@ export async function generateSchedule(
     const holiday = holidayMap.get(dateStr);
     const dayOfWeek = new Date(dateStr).getDay();
 
-    // 工作日判断：节假日调休上班日 OR 非节假日的周一至周五
-    const isWorkday = (holiday && !holiday.isOffDay) || (!holiday && dayOfWeek !== 0 && dayOfWeek !== 6);
+    const isWorkday = !holiday?.isOffDay && !(dayOfWeek === 0 || dayOfWeek === 6);
 
     let employee: string | null = null;
     if (isWorkday && config.startDate && config.startEmployee) {
@@ -84,5 +92,3 @@ export async function generateSchedule(
 
   return schedule;
 }
-
-export default { generateSchedule };

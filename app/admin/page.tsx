@@ -3,30 +3,31 @@
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
-
-interface ScheduleConfig {
-  startDate?: string;
-  startEmployee?: string;
-  employeeOrder: string[];
-}
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { EmployeeDragSort } from '@/components/employees';
 
 export default function AdminPage() {
   const [employees, setEmployees] = useState<string[]>([]);
   const [newEmployee, setNewEmployee] = useState('');
   const [loading, setLoading] = useState(true);
-  const [config, setConfig] = useState<ScheduleConfig>({ employeeOrder: [] });
+  const [config, setConfig] = useState<{ startDate?: string; startEmployee?: string; employeeOrder: string[] }>({ employeeOrder: [] });
   const [startDate, setStartDate] = useState('');
   const [startEmployee, setStartEmployee] = useState('');
   const router = useRouter();
 
-  // Check if user is authenticated
   useEffect(() => {
-    // In a real app, you would check authentication status via API
     const authenticated = localStorage.getItem('authenticated') === 'true';
-    if (!authenticated) {
+    const expiresAt = localStorage.getItem('authExpiresAt');
+    const isExpired = expiresAt && Date.now() > parseInt(expiresAt);
+
+    if (!authenticated || isExpired) {
+      localStorage.removeItem('authenticated');
+      localStorage.removeItem('authExpiresAt');
       router.push('/login');
     } else {
-      // Fetch employees data and schedule config
       Promise.all([fetchEmployees(), fetchScheduleConfig()]);
     }
   }, [router]);
@@ -65,12 +66,9 @@ export default function AdminPage() {
       try {
         const response = await fetch('/api/employees', {
           method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
+          headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ name: newEmployee.trim() }),
         });
-        
         const data = await response.json();
         if (data.success) {
           setEmployees(data.employees);
@@ -87,7 +85,6 @@ export default function AdminPage() {
       const response = await fetch(`/api/employees?name=${encodeURIComponent(name)}`, {
         method: 'DELETE',
       });
-      
       const data = await response.json();
       if (data.success) {
         setEmployees(data.employees);
@@ -99,15 +96,11 @@ export default function AdminPage() {
 
   const updateEmployeeOrder = async (newOrder: string[]) => {
     try {
-      // 更新员工顺序需要通过employees API而不是schedule config
       const response = await fetch('/api/employees', {
         method: 'PUT',
-        headers: {
-          'Content-Type': 'application/json',
-        },
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ employees: newOrder }),
       });
-      
       const data = await response.json();
       if (data.success) {
         setEmployees(data.employees);
@@ -121,20 +114,15 @@ export default function AdminPage() {
     try {
       const response = await fetch('/api/schedule/config', {
         method: 'PUT',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ 
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
           ...config,
           startDate: startDate || undefined,
           startEmployee: startEmployee || undefined
-          // 不再传递employeeOrder，因为员工顺序由employees API管理
         }),
       });
-      
       const data = await response.json();
       if (data.success) {
-        setConfig(data.config);
         alert('排班设置已保存');
       }
     } catch (error) {
@@ -143,155 +131,97 @@ export default function AdminPage() {
     }
   };
 
-  const moveEmployee = (fromIndex: number, toIndex: number) => {
-    const newOrder = [...employees];
-    const [movedItem] = newOrder.splice(fromIndex, 1);
-    newOrder.splice(toIndex, 0, movedItem);
-    setEmployees(newOrder);
-    // 立即更新员工顺序
-    updateEmployeeOrder(newOrder);
-  };
-
   const handleLogout = () => {
     localStorage.removeItem('authenticated');
+    localStorage.removeItem('authExpiresAt');
     router.push('/login');
   };
 
   return (
-    <div className="min-h-screen bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
-      <div className="max-w-3xl mx-auto">
-        <div className="text-center mb-8">
-          <div className="flex justify-between items-center mb-4">
-            <h1 className="text-3xl font-bold text-gray-900">排班管理系统</h1>
-            <button 
-              onClick={handleLogout}
-              className="text-sm text-gray-500 hover:text-gray-700"
-            >
-              退出登录
-            </button>
-          </div>
-          <p className="text-gray-600">管理员面板</p>
+    <div className="min-h-screen bg-gray-50 py-8 px-4 sm:px-6 lg:px-8">
+      <div className="max-w-5xl mx-auto space-y-6">
+        <div className="flex justify-between items-center">
+          <h1 className="text-3xl font-bold text-gray-900">排班管理系统</h1>
+          <Button variant="ghost" onClick={handleLogout}>退出登录</Button>
         </div>
 
-        <div className="bg-white shadow rounded-lg p-6 mb-8">
-          <h2 className="text-xl font-semibold text-gray-800 mb-4">员工管理</h2>
-          
-          <div className="flex mb-6">
-            <input
-              type="text"
-              value={newEmployee}
-              onChange={(e) => setNewEmployee(e.target.value)}
-              placeholder="输入新员工姓名"
-              className="flex-grow px-4 py-2 border border-gray-300 rounded-l-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-              onKeyPress={(e) => e.key === 'Enter' && addEmployee()}
-            />
-            <button
-              onClick={addEmployee}
-              className="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-r-md transition duration-200"
-            >
-              添加
-            </button>
-          </div>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 items-stretch">
+          <Card>
+            <CardHeader>
+              <CardTitle>员工管理</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="flex gap-2 mb-6">
+                <Input
+                  value={newEmployee}
+                  onChange={(e) => setNewEmployee(e.target.value)}
+                  placeholder="输入新员工姓名"
+                  onKeyPress={(e) => e.key === 'Enter' && addEmployee()}
+                />
+                <Button onClick={addEmployee}>添加</Button>
+              </div>
 
-          {loading ? (
-            <p className="text-gray-500 text-center py-4">加载中...</p>
-          ) : employees.length > 0 ? (
-            <div className="mb-6">
-              <h3 className="text-lg font-medium text-gray-700 mb-2">员工顺序（拖拽排序）</h3>
-              <ul className="border rounded-md divide-y divide-gray-200">
-                {employees.map((employee, index) => (
-                  <li 
-                    key={index} 
-                    className="flex justify-between items-center px-4 py-3 hover:bg-gray-50"
+              {loading ? (
+                <p className="text-gray-500 text-center py-4">加载中...</p>
+              ) : employees.length > 0 ? (
+                <div>
+                  <Label className="mb-2 block">员工顺序（拖拽排序）</Label>
+                  <EmployeeDragSort
+                    employees={employees}
+                    onReorder={updateEmployeeOrder}
+                  />
+                </div>
+              ) : (
+                <p className="text-gray-500 text-center py-4">暂无员工数据</p>
+              )}
+            </CardContent>
+          </Card>
+
+          <div className="space-y-6">
+            <Card>
+              <CardHeader>
+                <CardTitle>排班设置</CardTitle>
+              </CardHeader>
+              <CardContent className="space-y-4">
+                <div>
+                  <Label htmlFor="startDate">起始日期</Label>
+                  <Input
+                    type="date"
+                    id="startDate"
+                    value={startDate}
+                    onChange={(e) => setStartDate(e.target.value)}
+                  />
+                </div>
+
+                <div>
+                  <Label htmlFor="startEmployee">起始员工</Label>
+                  <select
+                    id="startEmployee"
+                    value={startEmployee}
+                    onChange={(e) => setStartEmployee(e.target.value)}
+                    className="flex h-9 w-full rounded-md border border-input bg-transparent px-3 py-1 text-base shadow-sm transition-colors file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50 md:text-sm"
                   >
-                    <div className="flex items-center">
-                      <button 
-                        className="mr-2 text-gray-400 hover:text-gray-600"
-                        onClick={() => moveEmployee(index, Math.max(0, index - 1))}
-                        disabled={index === 0}
-                      >
-                        ↑
-                      </button>
-                      <button 
-                        className="mr-4 text-gray-400 hover:text-gray-600"
-                        onClick={() => moveEmployee(index, Math.min(employees.length - 1, index + 1))}
-                        disabled={index === employees.length - 1}
-                      >
-                        ↓
-                      </button>
-                      <span className="text-gray-700">{employee}</span>
-                    </div>
-                    <button
-                      onClick={() => removeEmployee(employee)}
-                      className="text-red-500 hover:text-red-700 transition duration-200"
-                    >
-                      删除
-                    </button>
-                  </li>
-                ))}
-              </ul>
-            </div>
-          ) : (
-            <p className="text-gray-500 text-center py-4">暂无员工数据</p>
-          )}
-        </div>
+                    <option value="">选择起始员工</option>
+                    {employees.map((employee) => (
+                      <option key={employee} value={employee}>{employee}</option>
+                    ))}
+                  </select>
+                </div>
 
-        <div className="bg-white shadow rounded-lg p-6 mb-8">
-          <h2 className="text-xl font-semibold text-gray-800 mb-4">排班设置</h2>
-          
-          <div className="mb-4">
-            <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="startDate">
-              起始日期
-            </label>
-            <input
-              type="date"
-              id="startDate"
-              value={startDate}
-              onChange={(e) => setStartDate(e.target.value)}
-              className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-            />
-          </div>
-          
-          <div className="mb-4">
-            <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="startEmployee">
-              起始员工
-            </label>
-            <select
-              id="startEmployee"
-              value={startEmployee}
-              onChange={(e) => setStartEmployee(e.target.value)}
-              className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-            >
-              <option value="">选择起始员工</option>
-              {employees.map((employee, index) => (
-                <option key={index} value={employee}>{employee}</option>
-              ))}
-            </select>
-          </div>
-          
-          <button
-            onClick={saveScheduleConfig}
-            className="bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded-md transition duration-200"
-          >
-            保存排班设置
-          </button>
-        </div>
+                <Button onClick={saveScheduleConfig}>保存排班设置</Button>
+              </CardContent>
+            </Card>
 
-        <div className="bg-white shadow rounded-lg p-6">
-          <h2 className="text-xl font-semibold text-gray-800 mb-4">排班操作</h2>
-          <div className="flex flex-wrap gap-4">
-            <Link 
-              href="/schedule" 
-              className="bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded-md transition duration-200"
-            >
-              查看排班表
-            </Link>
-            {/* <button className="bg-indigo-500 hover:bg-indigo-600 text-white px-4 py-2 rounded-md transition duration-200">
-              生成排班表
-            </button>
-            <button className="bg-purple-500 hover:bg-purple-600 text-white px-4 py-2 rounded-md transition duration-200">
-              导出排班表
-            </button> */}
+            <Card>
+              <CardHeader>
+                <CardTitle>排班操作</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <Link href="/schedule">
+                  <Button>查看排班表</Button>
+                </Link>
+              </CardContent>
+            </Card>
           </div>
         </div>
       </div>

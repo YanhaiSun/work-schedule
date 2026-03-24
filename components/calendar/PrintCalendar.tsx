@@ -1,0 +1,125 @@
+"use client";
+
+import { ScheduleEntry } from '@/types';
+
+interface PrintCalendarProps {
+  year: number;
+  month: number;
+  schedule: ScheduleEntry[];
+}
+
+const weekdays = ['周日', '周一', '周二', '周三', '周四', '周五', '周六'];
+
+export function PrintCalendar({ year, month, schedule }: PrintCalendarProps) {
+  const today = new Date();
+  const isCurrentMonth = today.getFullYear() === year && today.getMonth() === month;
+
+  const firstDay = new Date(year, month, 1);
+  const lastDay = new Date(year, month + 1, 0);
+  const startDayOfWeek = firstDay.getDay();
+  const daysInMonth = lastDay.getDate();
+
+  const calendar: (number | null)[][] = [];
+  let week: (number | null)[] = [];
+
+  for (let i = 0; i < startDayOfWeek; i++) {
+    week.push(null);
+  }
+
+  for (let day = 1; day <= daysInMonth; day++) {
+    week.push(day);
+    if (week.length === 7) {
+      calendar.push(week);
+      week = [];
+    }
+  }
+
+  if (week.length > 0) {
+    while (week.length < 7) {
+      week.push(null);
+    }
+    calendar.push(week);
+  }
+
+  const getScheduleForDay = (day: number): ScheduleEntry | undefined => {
+    const dateStr = `${year}-${String(month + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
+    return schedule.find(s => s.date === dateStr);
+  };
+
+  const isToday = (day: number): boolean => {
+    return isCurrentMonth && today.getDate() === day;
+  };
+
+  return (
+    <table className="w-full border-collapse">
+      <thead>
+        <tr>
+          {weekdays.map(day => (
+            <th
+              key={day}
+              className="border border-gray-300 bg-gray-100 p-3 text-center font-medium text-gray-700"
+            >
+              {day}
+            </th>
+          ))}
+        </tr>
+      </thead>
+      <tbody>
+        {calendar.map((week, weekIndex) => (
+          <tr key={weekIndex} className="calendar-row">
+            {week.map((day, dayIndex) => {
+              const entry = day ? getScheduleForDay(day) : undefined;
+              const hasEmployee = !!entry?.employee;
+              const hasHolidayName = entry?.holidayName && entry.isOffDay;
+              const todayHighlight = day && isToday(day);
+
+              return (
+                <td
+                  key={dayIndex}
+                  className={`border border-gray-300 p-2 h-28 relative ${todayHighlight ? 'bg-blue-50' : ''}`}
+                >
+                  {day && (
+                    <>
+                      {/* 顶部角标：日期 + 休/班（左右分布） */}
+                      <div className="absolute top-1 left-1 right-1 flex justify-between items-center z-10">
+                        <span className={`font-bold text-sm ${todayHighlight ? 'text-blue-600' : 'text-gray-800'}`}>
+                          {day}
+                        </span>
+                        {entry?.holidayName && (
+                          <span
+                            className={`px-1.5 py-0.5 rounded text-xs font-medium ${
+                              entry.isOffDay
+                                ? 'bg-red-100 text-red-800'
+                                : 'bg-green-100 text-green-800'
+                            }`}
+                          >
+                            {entry.isOffDay ? '休' : '班'}
+                          </span>
+                        )}
+                      </div>
+
+                      {/* 居中内容：节假日名称 或 员工姓名 */}
+                      <div className="absolute inset-0 flex flex-col items-center justify-center z-0">
+                        {hasHolidayName ? (
+                          <div className="px-2 py-1">
+                            <span className="text-red-800 text-sm font-medium">
+                              {entry.holidayName}
+                            </span>
+                          </div>
+                        ) : hasEmployee ? (
+                          <span className="text-gray-900 font-medium text-base">
+                            {entry.employee}
+                          </span>
+                        ) : null}
+                      </div>
+                    </>
+                  )}
+                </td>
+              );
+            })}
+          </tr>
+        ))}
+      </tbody>
+    </table>
+  );
+}

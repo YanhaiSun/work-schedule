@@ -3,24 +3,53 @@
 :root {
   --background: #ffffff;
   --foreground: #171717;
+  --card: #ffffff;
+  --card-foreground: #171717;
+  --popover: #ffffff;
+  --popover-foreground: #171717;
+  --primary: #2563eb;
+  --primary-foreground: #ffffff;
+  --secondary: #f5f5f5;
+  --secondary-foreground: #171717;
+  --muted: #f5f5f5;
+  --muted-foreground: #737373;
+  --accent: #f5f5f5;
+  --accent-foreground: #171717;
+  --destructive: #dc2626;
+  --destructive-foreground: #ffffff;
+  --border: #e5e5e5;
+  --input: #e5e5e5;
+  --ring: #2563eb;
+  --radius: 0.5rem;
 }
 
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-destructive-foreground: var(--destructive-foreground);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
 }
-
-/* 移除深色模式设置，始终使用浅色模式 */
-/*
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
-}
-*/
 
 body {
   background: var(--background);
@@ -28,160 +57,117 @@ body {
   font-family: Arial, Helvetica, sans-serif;
 }
 
-.fc-daygrid-day-top {
-  /* 你的样式 */
-  justify-content: left !important;
-}
-.fc-daygrid-day-events {
-  /* 你的样式 */
-  display: none;
-}
-.fc-daygrid-day {
-  height: 100px;
-}
-.fc-daygrid-day-top {
-  height: 100px;
-}
-/* 修复工具栏隐藏问题 */
-.fc-header-toolbar,
-.fc-toolbar,
-.fc-toolbar-ltr {
-  display: none !important;
-}
-.fc-toolbar-chunk {
-  display: none !important;
-}
-.p-1 h-full {
-  height: 100%;
-  width: 100%;
-  display: flex;
-  justify-content: center;
-}
-.fc-daygrid-day-number {
-  /* 你的样式 */
-  width: 100%;
-  padding: 0;
-}
-.mt-1 {
-  justify-content: center;
-  display: flex;
-  text-align: center
-}
-/* 员工姓名在不同屏幕尺寸下的字体大小 */
-.employee-name {
-  font-size: 0.8rem; /* 默认大小 (lg) */
-  color: #111827; /* 固定深色 */
-}
+/* 打印样式 */
+@media print {
+  .no-print {
+    display: none !important;
+  }
 
-/* 在小屏幕设备上减小字体 */
-@media (max-width: 768px) {
-  .employee-name {
-    font-size: 0.8rem; /* md */
+  body,
+  .min-h-screen,
+  body * {
+    background: white !important;
   }
-  .holiday-name {
-    font-size: 0.7rem;
+
+  @page {
+    size: A4 landscape;
+    margin: 10mm;
+    background: white;
   }
-  .badge-name {
-    font-size: 0.7rem;
+
+  * {
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
   }
 }
 
-@media (max-width: 480px) {
-  .employee-name {
-    font-size: 0.65rem; /* sm */
-  }
-  .holiday-name {
-    font-size: 0.65rem;
-  }
-  .badge-name {
-    font-size: 0.65rem;
-  }
-}
-
-/* 在大屏幕设备上适当增大字体 */
-@media (min-width: 1280px) {
-  .employee-name {
-    font-size: 0.8rem;
-  }
-  .holiday-name {
-    font-size: 0.8rem;
-  }
-  .badge-name {
-    font-size: 0.8rem;
-  }
-}
-
-@media (min-width: 1536px) {
-  .employee-name {
-    font-size: 0.8rem; /* 2xl */
-  }
-  .holiday-name {
-    font-size: 0.8rem;
-  }
-  .badge-name {
-    font-size: 0.8rem;
-  }
-}
-
-/* 保持"休"字和节假日名称的红色 */
-.fixed-text-red-800 {
-  color: #991b1b !important;
-}
-
-/* 保持"班"字的绿色 */
-.fixed-text-green-800 {
-  color: #166534 !important;
-}
-
-/* 保持"休"字背景色 */
+/* 打印时保持背景色 */
 .bg-red-100 {
   background-color: #fee2e2 !important;
 }
 
-/* 保持"班"字背景色 */
 .bg-green-100 {
   background-color: #dcfce7 !important;
 }
 
-/* 打印时使用最大的字体 */
+/* 打印时隐藏当天高亮 */
 @media print {
-  .employee-name {
-    font-size: 1.5rem !important;
+  .bg-blue-50 {
+    background-color: transparent !important;
   }
-  
-  .fixed-text-gray-900 {
-    color: #111827 !important;
+  .text-blue-600 {
+    color: #374151 !important;
   }
-  
-  .fixed-text-gray-800 {
-    color: #1f2937 !important;
+
+  /* 确保表格边框打印时可见 */
+  .border-gray-300 {
+    border-color: #d1d5db !important;
   }
-  
-  .fixed-text-gray-600 {
-    color: #4b5563 !important;
+
+  table {
+    border-collapse: collapse !important;
   }
-  
-  .fixed-text-gray-500 {
-    color: #6b7280 !important;
+
+  th, td {
+    border: 1px solid #d1d5db !important;
   }
-  
-  /* 保持"休"字和节假日名称的红色 */
-  .fixed-text-red-800 {
+
+  /* 确保日期和休/班标签打印可见 */
+  .text-gray-800 {
+    color: #374151 !important;
+  }
+
+  .text-red-800 {
     color: #991b1b !important;
   }
-  
-  /* 保持"班"字的绿色 */
-  .fixed-text-green-800 {
+
+  .text-green-800 {
     color: #166534 !important;
   }
-  
-  /* 保持"休"字背景色 */
-  .bg-red-100 {
-    background-color: #fee2e2 !important;
+
+  /* 打印时让日期和徽标紧贴单元格上边框 */
+  th, td {
+    padding-top: 0 !important;
   }
-  
-  /* 保持"班"字背景色 */
-  .bg-green-100 {
-    background-color: #dcfce7 !important;
+}
+
+/* 日历过渡动画 */
+.calendar-container {
+  transition: opacity 0.3s ease-in-out;
+}
+
+.calendar-container.fade-out {
+  opacity: 0;
+}
+
+.calendar-container.fade-in {
+  opacity: 1;
+}
+
+/* 表格行动画 */
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
   }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.calendar-row {
+  animation: slideIn 0.3s ease-out forwards;
+}
+
+.calendar-row:nth-child(1) { animation-delay: 0ms; }
+.calendar-row:nth-child(2) { animation-delay: 50ms; }
+.calendar-row:nth-child(3) { animation-delay: 100ms; }
+.calendar-row:nth-child(4) { animation-delay: 150ms; }
+.calendar-row:nth-child(5) { animation-delay: 200ms; }
+.calendar-row:nth-child(6) { animation-delay: 250ms; }
+
+/* 按钮悬停效果 */
+button {
+  transition: all 0.2s ease-in-out;
 }
