@@ -57,7 +57,7 @@ export function PrintCalendar({ year, month, schedule }: PrintCalendarProps) {
           {weekdays.map(day => (
             <th
               key={day}
-              className="border border-gray-300 bg-gray-100 p-3 text-center font-medium text-gray-700"
+              className="border border-gray-300 bg-gray-100 p-3 text-center font-medium text-gray-700 align-middle"
             >
               {day}
             </th>

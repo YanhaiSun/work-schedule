@@ -1,0 +1,21 @@
+# This is an example configuration file
+# To learn more, see the full config.yaml reference: https://docs.continue.dev/reference
+
+name: Example Config
+version: 1.0.0
+schema: v1
+
+# Define which models can be used
+# https://docs.continue.dev/customization/models
+models:
+  - name: GPT-5.4 (NowCoding)
+    provider: openai
+    model: gpt-5.4
+    apiKey: sk-J7I8uslaRndKCAU8cTRu5zKreuZYiS1aRNRUXvTV8JcQZmRS
+    apiBase: https://nowcoding.ai/v1
+
+  - name: claude-opus 4.5 (NowCoding)
+    provider: openai
+    model: claude-opus-4-5-20251101-thinking
+    apiKey: sk-J7I8uslaRndKCAU8cTRu5zKreuZYiS1aRNRUXvTV8JcQZmRS
+    apiBase: https://nowcoding.ai/v1
