@@ -11,23 +11,31 @@ export async function loadHolidaysForYear(year: number): Promise<Holiday[]> {
     const controller = new AbortController();
     const timeoutId = setTimeout(() => controller.abort(), 5000);
 
-    const response = await fetch(`${GITHUB_HOLIDAY_URL}/${year}.json`, {
+    const url = `${GITHUB_HOLIDAY_URL}/${year}.json`;
+    console.log(`Fetching holidays from GitHub: ${url}`);
+
+    const response = await fetch(url, {
       signal: controller.signal,
     });
 
     clearTimeout(timeoutId);
+    console.log(`GitHub response status: ${response.status}`);
 
     if (response.ok) {
       const data: HolidayFile = await response.json();
+      console.log(`GitHub data received, days count: ${data.days?.length || 0}`);
       // 保存到本地作为缓存
       await saveHolidayToLocal(year, data);
       return data.days || [];
+    } else {
+      console.log(`GitHub response not ok: ${response.status}`);
     }
-  } catch (error) {
-    console.log(`Failed to fetch holidays from GitHub for ${year}, trying local file...`);
+  } catch (error: any) {
+    console.log(`Failed to fetch holidays from GitHub for ${year}:`, error?.message || error);
   }
 
   // 回退到本地文件
+  console.log(`Falling back to local holidays for ${year}`);
   return loadLocalHolidays(year);
 }
 
