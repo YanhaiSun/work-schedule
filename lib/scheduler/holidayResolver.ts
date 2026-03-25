@@ -3,8 +3,47 @@ import fs from 'fs';
 import path from 'path';
 
 const HOLIDAYS_DIR = path.join(process.cwd(), 'holidays');
+const GITHUB_HOLIDAY_URL = 'https://raw.githubusercontent.com/NateScarlet/holiday-cn/master';
 
 export async function loadHolidaysForYear(year: number): Promise<Holiday[]> {
+  // 先尝试从 GitHub 获取
+  try {
+    const controller = new AbortController();
+    const timeoutId = setTimeout(() => controller.abort(), 5000);
+
+    const response = await fetch(`${GITHUB_HOLIDAY_URL}/${year}.json`, {
+      signal: controller.signal,
+    });
+
+    clearTimeout(timeoutId);
+
+    if (response.ok) {
+      const data: HolidayFile = await response.json();
+      // 保存到本地作为缓存
+      await saveHolidayToLocal(year, data);
+      return data.days || [];
+    }
+  } catch (error) {
+    console.log(`Failed to fetch holidays from GitHub for ${year}, trying local file...`);
+  }
+
+  // 回退到本地文件
+  return loadLocalHolidays(year);
+}
+
+async function saveHolidayToLocal(year: number, data: HolidayFile): Promise<void> {
+  try {
+    if (!fs.existsSync(HOLIDAYS_DIR)) {
+      fs.mkdirSync(HOLIDAYS_DIR, { recursive: true });
+    }
+    const filePath = path.join(HOLIDAYS_DIR, `${year}.json`);
+    fs.writeFileSync(filePath, JSON.stringify(data, null, 2));
+  } catch (error) {
+    console.error(`Failed to save holidays to local for ${year}:`, error);
+  }
+}
+
+async function loadLocalHolidays(year: number): Promise<Holiday[]> {
   try {
     const filePath = path.join(HOLIDAYS_DIR, `${year}.json`);
     if (!fs.existsSync(filePath)) {
