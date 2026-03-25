@@ -51,13 +51,13 @@ export function PrintCalendar({ year, month, schedule }: PrintCalendarProps) {
   };
 
   return (
-    <table className="w-full border-collapse table-fixed">
+    <table className="w-full border-collapse">
       <thead>
         <tr>
           {weekdays.map(day => (
             <th
               key={day}
-              className="border border-gray-300 bg-gray-100 px-2 py-2 text-center font-medium text-gray-700 align-middle h-10"
+              className="border border-gray-300 bg-gray-100 px-2 py-2 text-center font-medium text-gray-700 align-middle"
             >
               {day}
             </th>
@@ -76,13 +76,13 @@ export function PrintCalendar({ year, month, schedule }: PrintCalendarProps) {
               return (
                 <td
                   key={dayIndex}
-                  className={`border border-gray-300 p-1 h-24 relative ${todayHighlight ? 'bg-blue-50' : ''}`}
+                  className={`border border-gray-300 p-1 h-28 relative ${todayHighlight ? 'bg-blue-50 print:bg-transparent' : ''}`}
                 >
                   {day && (
                     <>
                       {/* 顶部角标：日期 + 休/班（左右分布） */}
                       <div className="absolute top-1 left-1 right-1 flex justify-between items-center z-10">
-                        <span className={`font-bold text-xs ${todayHighlight ? 'text-blue-600' : 'text-gray-800'}`}>
+                        <span className={`font-bold text-xs ${todayHighlight ? 'text-blue-600 print:text-gray-700' : 'text-gray-800'}`}>
                           {day}
                         </span>
                         {entry?.holidayName && (
@@ -102,12 +102,12 @@ export function PrintCalendar({ year, month, schedule }: PrintCalendarProps) {
                       <div className="absolute inset-0 flex flex-col items-center justify-center z-0">
                         {hasHolidayName ? (
                           <div className="px-1 py-0.5">
-                            <span className="text-red-800 text-xs font-medium">
+                            <span className="text-red-800 text-xs font-medium print:text-red-900">
                               {entry.holidayName}
                             </span>
                           </div>
                         ) : hasEmployee ? (
-                          <span className="text-gray-900 font-medium text-sm">
+                          <span className="text-gray-900 font-medium text-sm print:text-gray-800">
                             {entry.employee}
                           </span>
                         ) : null}

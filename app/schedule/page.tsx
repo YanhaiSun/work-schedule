@@ -81,17 +81,17 @@ export default function SchedulePage() {
           </Button>
         </div>
 
-        <div className="bg-white rounded-lg p-4 print:p-0">
+        <div className="bg-white rounded-lg p-4 print:p-0 print:rounded-none">
           <h1 className="text-2xl font-semibold text-gray-800 text-center mb-6 hidden print:block">
             {currentDate.getFullYear()}年 {currentDate.getMonth() + 1}月 排班表
           </h1>
 
-          <div className="relative overflow-hidden">
+          <div className="relative overflow-visible">
             <AnimatePresence mode="wait" initial={false}>
               {loading ? (
                 <motion.div
                   key="loading"
-                  className="flex items-center justify-center h-64"
+                  className="flex items-center justify-center h-64 print:hidden"
                 >
                   <div className="w-8 h-8 border-4 border-blue-200 border-t-blue-500 rounded-full animate-spin" />
                 </motion.div>
