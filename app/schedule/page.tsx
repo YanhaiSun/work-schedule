@@ -10,12 +10,6 @@ import { ExportDialog } from '@/components/export';
 import { ScheduleEntry } from '@/types';
 import { exportScheduleToExcel } from '@/lib/exporters/excel';
 
-const calendarVariants = {
-  initial: { opacity: 0, y: 10 },
-  animate: { opacity: 1, y: 0 },
-  exit: { opacity: 0, y: -10 },
-};
-
 export default function SchedulePage() {
   const [currentDate, setCurrentDate] = useState(new Date());
   const [schedule, setSchedule] = useState<ScheduleEntry[]>([]);
@@ -97,43 +91,23 @@ export default function SchedulePage() {
               {loading ? (
                 <motion.div
                   key="loading"
-                  initial={{ opacity: 0, scale: 0.95 }}
-                  animate={{ opacity: 1, scale: 1 }}
-                  exit={{ opacity: 0, scale: 0.95 }}
-                  transition={{ duration: 0.25, ease: [0.22, 1, 0.36, 1] }}
                   className="flex items-center justify-center h-64"
                 >
-                  <div className="relative">
-                    <motion.div
-                      animate={{
-                        scale: [1, 1.2, 1],
-                        opacity: [0.5, 1, 0.5],
-                      }}
-                      transition={{ duration: 1.5, repeat: Infinity, ease: "easeInOut" }}
-                      className="w-12 h-12 border-4 border-blue-200 border-t-blue-500 rounded-full"
-                    />
-                    <div className="text-gray-500 text-center mt-4">加载中...</div>
-                  </div>
+                  <div className="w-8 h-8 border-4 border-blue-200 border-t-blue-500 rounded-full animate-spin" />
                 </motion.div>
               ) : (
                 <motion.div
                   key={`${currentDate.getFullYear()}-${currentDate.getMonth()}`}
-                  initial={{ opacity: 0, x: direction * 100, rotateY: direction * 15 }}
-                  animate={{ opacity: 1, x: 0, rotateY: 0 }}
-                  exit={{ opacity: 0, x: direction * -100, rotateY: direction * -15 }}
-                  transition={{ duration: 0.3, ease: [0.22, 1, 0.36, 1] }}
+                  initial={{ x: direction * 50 }}
+                  animate={{ x: 0 }}
+                  exit={{ x: direction * -50 }}
+                  transition={{ duration: 0.25, ease: [0.22, 1, 0.36, 1] }}
                 >
-                  <motion.div
-                    initial={{ scale: 0.95, opacity: 0 }}
-                    animate={{ scale: 1, opacity: 1 }}
-                    transition={{ delay: 0.1, duration: 0.3, ease: [0.22, 1, 0.36, 1] }}
-                  >
-                    <PrintCalendar
-                      year={currentDate.getFullYear()}
-                      month={currentDate.getMonth()}
-                      schedule={schedule}
-                    />
-                  </motion.div>
+                  <PrintCalendar
+                    year={currentDate.getFullYear()}
+                    month={currentDate.getMonth()}
+                    schedule={schedule}
+                  />
                 </motion.div>
               )}
             </AnimatePresence>
